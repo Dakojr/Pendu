@@ -44,6 +44,7 @@
                             array_push($arrraye, "_");
                             echo("_ ");
                         }
+                        var_dump($arrraye);
                     ?>
                 </div>
             </div>
