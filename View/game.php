@@ -39,9 +39,10 @@
             <div class="py-5 text-center">
                 <div id="theword">
                     <?php
-
+                    $arrraye = array();
                         for($i = 0; $i < $length; $i++){
-                            echo "_ ";
+                            array_push($arrraye, "_");
+                            echo("_ ");
                         }
                     ?>
                 </div>
@@ -93,8 +94,6 @@
         </div>
     </div>
     <script>
-
-        
         $(".btn").click(function (e) {
 
             $.post(
@@ -108,8 +107,6 @@
                     //$('#theword').html(data);
                 });
         })
-
-      
     </script>
 </body>
 
