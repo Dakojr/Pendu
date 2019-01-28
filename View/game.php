@@ -2,9 +2,12 @@
 
     if(isset($_POST['word']))
     {
+        $_POST['word'] = strtolower($_POST['word']);
         session_start();
         $_SESSION['word'] = $_POST['word'];
         $length = strlen($_SESSION['word']);
+    } else {
+        header('Location: ../index.html');
     }
 
     if(isset($_GET['letter']))
@@ -37,12 +40,13 @@
     <div class="container">
         <div class="container">
             <div class="py-5 text-center">
+                <div id="winorloose"></div>
                 <div id="theword">
                     <?php
                     $arraye = array();
                         for($i = 0; $i < $length; $i++){
                             array_push($arraye, "_");
-                            echo("_ ");
+                            echo("_");
                         }
                         $_SESSION['arraye'] = $arraye;
                     ?>
@@ -50,7 +54,7 @@
             </div>
         </div>
 
-        <div class="container" style="width: 400px; height: 400px;">
+        <div class="container">
             <div class="py-5 text-center">
                 <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                     <div class="btn-group" role="group" aria-label="First group">
@@ -93,8 +97,10 @@
             </div>
         </div>
         <div class="container">
-            <div id="false"></div>
-            <div id="pipe"></div>
+            <div class="py-5 text-center">
+                <div id="false"></div>
+                <div id="pipe"></div>
+            </div>
         </div>
     </div>
     <script>
@@ -104,27 +110,28 @@
             $.post(
                 "../controller/displayword.php",
                 {
-                    "letter": $(this).text(), // le text du boutton
+                    "letter": $(this).text(),       //le text du boutton
                 },
                 function (data) {
                     data = JSON.parse(data);
+                    if(i >= 7 && data.hasOwnProperty('loose')) {
+                        $('#winorloose').html(data.loose);
+                        console.log(data.loose);
+                        $('.btn').prop('disabled', true);
+                    }
+                    if(data.hasOwnProperty('win')) {
+                        $('#winorloose').html(data.win);                        
+                    }
+                    arr.length = data.word.length - 1;
                     if (data.letter === false) {
-                        console.log(i);
                         i++;
                         $('#false').html("<h1>" + i + "</h1>");
-                        $('#pipe').append("|");
-                    }else {
-                        console.log(data.under[data.letter]);
-                        console.log(data.letter);
-                        data.under[data.letter] = data.word[data.letter];
-                        console.log(data.word[data.letter]);
-                        arr.splice(data.letter, 0, data.under[data.letter]);  //arr.splice(index, 0, item);
-                        console.log(arr);
-                        $('#theword').html(arr);
+                        // $('#pipe').append("|");
+                    } else {
+                        $('#theword').html(data.under);
                     }
                 });
         })
     </script>
 </body>
-
 </html>
