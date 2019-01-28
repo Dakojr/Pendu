@@ -39,17 +39,16 @@
             <div class="py-5 text-center">
                 <div id="theword">
                     <?php
-                    $arrraye = array();
+                    $arraye = array();
                         for($i = 0; $i < $length; $i++){
-                            array_push($arrraye, "_");
+                            array_push($arraye, "_");
                             echo("_ ");
                         }
-                        var_dump($arrraye);
+                        $_SESSION['arraye'] = $arraye;
                     ?>
                 </div>
             </div>
         </div>
-
 
         <div class="container" style="width: 400px; height: 400px;">
             <div class="py-5 text-center">
@@ -93,10 +92,15 @@
                 </div>
             </div>
         </div>
+        <div class="container">
+            <div id="false"></div>
+            <div id="pipe"></div>
+        </div>
     </div>
     <script>
+        var i = 0;
+        var arr = [];
         $(".btn").click(function (e) {
-
             $.post(
                 "../controller/displayword.php",
                 {
@@ -104,8 +108,20 @@
                 },
                 function (data) {
                     data = JSON.parse(data);
-                    //console.log(data.word);
-                    //$('#theword').html(data);
+                    if (data.letter === false) {
+                        console.log(i);
+                        i++;
+                        $('#false').html("<h1>" + i + "</h1>");
+                        $('#pipe').append("|");
+                    }else {
+                        console.log(data.under[data.letter]);
+                        console.log(data.letter);
+                        data.under[data.letter] = data.word[data.letter];
+                        console.log(data.word[data.letter]);
+                        arr.splice(data.letter, 0, data.under[data.letter]);  //arr.splice(index, 0, item);
+                        console.log(arr);
+                        $('#theword').html(arr);
+                    }
                 });
         })
     </script>
